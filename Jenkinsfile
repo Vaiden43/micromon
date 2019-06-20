@@ -11,7 +11,7 @@ node {
     // change directory
     sh "cd AdminServer"
     // set maven wrapper permissions
-    sh "chmod 711 ./mvnw"""
+    sh "cd AdminServer && chmod 711 ./mvnw"
   }
 
 stage("Test"){
