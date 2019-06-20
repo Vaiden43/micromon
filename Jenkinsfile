@@ -139,7 +139,7 @@ def app4
       sh "chmod 711 ./mvnw"
     }
   }
-
+  
   stage("Test") {
     dir("TrainerServer"){
       /* runt tests */
