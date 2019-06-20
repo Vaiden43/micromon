@@ -7,7 +7,6 @@ node {
   }
 
   stage("Permissions") {
-    steps {
       parallel {
         stage("as permissions") {
           dir("AdminServer"){
@@ -20,7 +19,7 @@ node {
     }
         }
       }
-    }
+    
     /* change directory */
     dir("AdminServer"){
       /* set maven wrapper permissions */
