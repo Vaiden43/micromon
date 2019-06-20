@@ -7,19 +7,6 @@ node {
   }
 
   stage("Permissions") {
-      parallel {
-        stage("as permissions") {
-          dir("AdminServer"){
-      sh "chmod 711 ./mvnw"
-    }
-        }
-        stage("ds permissions") {
-          dir("DiscoveryServer"){
-      sh "chmod 711 ./mvnw"
-    }
-        }
-      }
-    
     /* change directory */
     dir("AdminServer"){
       /* set maven wrapper permissions */
@@ -48,12 +35,8 @@ node {
   }
 
   stage("Push Image") {
-    dir("AdminServer"){
-      docker.withRegistry("https://registry.hub.docker.com", "docker-hub-credentials") {
-        app.push("${env.BUILD_NUMBER}")
-        app.push("latest")
-      }
-    }
+    /* push the image to docker hub */
+    sh "echo TODO"
   }
 
 }
