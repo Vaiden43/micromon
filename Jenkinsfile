@@ -30,7 +30,7 @@ node {
 
   stage("Build Image") {
     dir("AdminServer"){
-      app = docker.build("ammonking/admin-server")
+      app = docker.build("vaiden/admin-server")
     }
   }
 
