@@ -1,0 +1,21 @@
+package com.vaiden.demo;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class PokemonController {
+
+	Pokedex dex;
+	
+	private Pokedex dex;
+	
+	public PokemonController() {
+		dex = new Pokedex();
+	}
+	
+	@GetMapping()
+	public String getPokemon() {
+		return dex.getPokemon();
+	}
+}

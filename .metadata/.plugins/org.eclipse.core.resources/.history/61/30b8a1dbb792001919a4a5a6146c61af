@@ -1,0 +1,24 @@
+package com.vaiden.demo;
+
+import java.util.List;
+import java.util.ArrayList;
+
+public class Pokedex {
+
+	private List<String> items;
+	
+	public Pokedex() {
+		this.items = new ArrayList<>();
+		
+		this.items.add("Bubasaur");
+		this.items.add("Charmander");
+		this.items.add("Squirtle");
+		this.items.add("Psyduck");
+		this.items.add("Pidgey");
+		this.items.add("Kyogre");
+		this.items.add("Mewtwo");
+		this.items.add("Beedrill");
+		this.items.add("Gengar");
+		
+	}
+}
