@@ -14,7 +14,7 @@ void theProcess(folder,image){
     }
     stage("build"){
       dir(folder){
-        app = docker.build("ammonking/"+image)
+        app = docker.build("vaiden/"+image)
       }
     }
     stage("deploy"){
