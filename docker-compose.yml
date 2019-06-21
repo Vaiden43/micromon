@@ -5,17 +5,18 @@ services:
     image: vaiden/admin-server
     ports:
       - 9000:9000
-    networks:
-      - spring-cloud-network
   discovery-server:
     container_name: discovery-server
     image: vaiden/discovery-server
     ports:
       - 8761:8761
-    networks:
-      - spring-cloud-network
-    links:
-      - admin-server:admin-server
-networks:
-  spring-cloud-network:
-    driver: bridge
+  pokemon-service:
+    container_name: pokemon_service
+    image: vaiden/pokemon-service
+    ports:
+      - 8081:8080
+  trainer-service:
+    container_name: trainer_service
+    image: vaiden/trainer-service
+    ports:
+      - 8091:8080
