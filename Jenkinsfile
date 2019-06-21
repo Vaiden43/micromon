@@ -92,29 +92,29 @@ def app3
 
   stage("Permissions") {
     /* change directory */
-    dir("PokemonServer"){
+    dir("PokemonService"){
       /* set maven wrapper permissions */
       sh "chmod 711 ./mvnw"
     }
   }
 
   stage("Test") {
-    dir("PokemonServer"){
+    dir("PokemonService"){
       /* runt tests */
       sh "./mvnw test"
     }
   }
 
   stage("Build Project") {
-    dir("PokemonServer"){
+    dir("PokemonService"){
       /* build the project */ 
       sh "./mvnw clean install"
     }
   }
 
   stage("Build Image") {
-    dir("PokemonServer"){
-      app3 = docker.build("vaiden/pokemon-server")
+    dir("PokemonService"){
+      app3 = docker.build("vaiden/pokemon-service")
     }
   }
 
@@ -134,29 +134,29 @@ def app4
 
   stage("Permissions") {
     /* change directory */
-    dir("TrainerServer"){
+    dir("TrainerService"){
       /* set maven wrapper permissions */
       sh "chmod 711 ./mvnw"
     }
   }
   
   stage("Test") {
-    dir("TrainerServer"){
+    dir("TrainerService"){
       /* runt tests */
       sh "./mvnw test"
     }
   }
 
   stage("Build Project") {
-    dir("TrainerServer"){
+    dir("TrainerService"){
       /* build the project */ 
       sh "./mvnw clean install"
     }
   }
 
   stage("Build Image") {
-    dir("TrainerServer"){
-      app4 = docker.build("vaiden/trainer-server")
+    dir("TrainerService"){
+      app4 = docker.build("vaiden/trainer-service")
     }
   }
 
