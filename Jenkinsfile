@@ -1,170 +1,58 @@
-node {
-  def app1
-
-  stage("Clone repository") {
-    /* clone the repository */
-    checkout scm    
-  }
-
-  stage("Permissions") {
-    /* change directory */
-    dir("AdminServer"){
-      /* set maven wrapper permissions */
-      sh "chmod 711 ./mvnw"
+// groovy language
+void theProcess(folder,image){
+  def app
+  script {
+    stage("permissions") {
+      dir(folder){
+        sh "chmod 711 ./mvnw"
+      }
+    }
+    stage("install"){
+      dir(folder){
+        sh "./mvnw -T 1C install -DskipTests"
+      }
+    }
+    stage("build"){
+      dir(folder){
+        app = docker.build("ammonking/"+image)
+      }
+    }
+    stage("deploy"){
+      dir(folder){
+        docker.withRegistry("https://registry.hub.docker.com","docker-hub-credentials") {
+          app.push("${env.BUILD_NUMBER}")
+          app.push("latest")
+        }
+      }
     }
   }
-
-  stage("Test") {
-    dir("AdminServer"){
-      /* runt tests */
-      sh "./mvnw test"
+}
+pipeline {
+  agent any 
+  stages {
+    stage("automation") {
+      parallel {
+        stage("AdminServer") {
+          steps {
+            theProcess("AdminServer","admin-server")
+          }
+        }
+        stage("DiscoveryServer") {
+          steps {
+            theProcess("DiscoveryServer","discovery-server")
+          }
+        }
+        stage("PokemonService") {
+          steps {
+            theProcess("PokemonService","pokemon-service")
+          }
+        }
+        stage("TrainerService") {
+          steps {
+            theProcess("TrainerService","trainer-service")
+          }
+        }
+      }
     }
-  }
-
-  stage("Build Project") {
-    dir("AdminServer"){
-      /* build the project */ 
-      sh "./mvnw clean install"
-    }
-  }
-
-  stage("Build Image") {
-    dir("AdminServer"){
-      app1 = docker.build("vaiden/admin-server")
-    }
-  }
-
-  stage("Push Image") {
-    /* push the image to docker hub */
-    sh "echo TODO"
-  }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-def app2
-
-  stage("Clone repository") {
-    /* clone the repository */
-    checkout scm    
-  }
-
-  stage("Permissions") {
-    /* change directory */
-    dir("DiscoveryServer"){
-      /* set maven wrapper permissions */
-      sh "chmod 711 ./mvnw"
-    }
-  }
-
-  stage("Test") {
-    dir("DiscoveryServer"){
-      /* runt tests */
-      sh "./mvnw test"
-    }
-  }
-
-  stage("Build Project") {
-    dir("DiscoveryServer"){
-      /* build the project */ 
-      sh "./mvnw clean install"
-    }
-  }
-
-  stage("Build Image") {
-    dir("DiscoveryServer"){
-      app2 = docker.build("vaiden/discovery-server")
-    }
-  }
-
-  stage("Push Image") {
-    /* push the image to docker hub */
-    sh "echo TODO"
-  }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-def app3
-
-  stage("Clone repository") {
-    /* clone the repository */
-    checkout scm    
-  }
-
-  stage("Permissions") {
-    /* change directory */
-    dir("PokemonService"){
-      /* set maven wrapper permissions */
-      sh "chmod 711 ./mvnw"
-    }
-  }
-
-  stage("Test") {
-    dir("PokemonService"){
-      /* runt tests */
-      sh "./mvnw test"
-    }
-  }
-
-  stage("Build Project") {
-    dir("PokemonService"){
-      /* build the project */ 
-      sh "./mvnw clean install"
-    }
-  }
-
-  stage("Build Image") {
-    dir("PokemonService"){
-      app3 = docker.build("vaiden/pokemon-service")
-    }
-  }
-
-  stage("Push Image") {
-    /* push the image to docker hub */
-    sh "echo TODO"
-  }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-def app4
-
-  stage("Clone repository") {
-    /* clone the repository */
-    checkout scm    
-  }
-
-  stage("Permissions") {
-    /* change directory */
-    dir("TrainerService"){
-      /* set maven wrapper permissions */
-      sh "chmod 711 ./mvnw"
-    }
-  }
-  
-  stage("Test") {
-    dir("TrainerService"){
-      /* runt tests */
-      sh "./mvnw test"
-    }
-  }
-
-  stage("Build Project") {
-    dir("TrainerService"){
-      /* build the project */ 
-      sh "./mvnw clean install"
-    }
-  }
-
-  stage("Build Image") {
-    dir("TrainerService"){
-      app4 = docker.build("vaiden/trainer-service")
-    }
-  }
-
-  stage("Push Image") {
-    /* push the image to docker hub */
-    sh "echo TODO"
-  }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  }  
 }
